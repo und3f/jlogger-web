@@ -1,0 +1,3 @@
+[submodule "contrib/jlogger"]
+	path = contrib/jlogger
+	url = git://github.com/und3f/jlogger.git
