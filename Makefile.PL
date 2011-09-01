@@ -6,6 +6,7 @@ all_from 'lib/JLogger/Web.pm';
 
 requires 'Class::Load';
 requires 'JSON';
+requires 'ObjectDB';
 requires 'Routes::Tiny';
 requires 'String::CamelCase';
 requires 'YAML';
