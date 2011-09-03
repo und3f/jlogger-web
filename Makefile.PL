@@ -9,6 +9,7 @@ requires 'JSON';
 requires 'ObjectDB';
 requires 'Routes::Tiny';
 requires 'String::CamelCase';
+requires 'Text::Caml';
 requires 'YAML';
 
 test_requires 'JLogger';

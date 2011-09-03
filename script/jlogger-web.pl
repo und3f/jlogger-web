@@ -3,10 +3,28 @@
 use strict;
 use warnings;
 
+use File::Basename;
+use File::Spec::Functions;
+use Plack::Builder;
+use YAML;
+
 use JLogger::Web;
 
-my $jlogger = JLogger::Web->new(config => {database => {source => 'dbi:Pg'}});
+my $home        = catfile(dirname(__FILE__), '..');
+my $static      = catfile($home,             'public');
+my $config_file = catfile($home,             'jlogger-web.yaml');
+
+my $config = YAML::LoadFile($config_file);
+$config->{templates_home} ||= catfile($home, 'templates');
+
+my $jlogger = JLogger::Web->new(config => $config);
 
 $jlogger->init;
 
-$jlogger->to_psgi_app;
+builder {
+    enable 'Plack::Middleware::Static',
+      path => qr{^/(images|js|css)/},
+      root => $static;
+
+    $jlogger->to_psgi_app;
+}

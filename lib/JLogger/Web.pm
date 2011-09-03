@@ -3,15 +3,21 @@ package JLogger::Web;
 use strict;
 use warnings;
 
+use Class::Load       ();
 use Routes::Tiny      ();
 use String::CamelCase ();
-use Class::Load       ();
 
 use JLogger::Web::Model;
 
+my $default_config = {messages_per_page => 10};
+
 sub new {
     my $class = shift;
-    bless {@_}, $class;
+    my $self = bless {@_}, $class;
+
+    $self->{config} = {%$default_config, %{$self->{config}}};
+
+    $self;
 }
 
 sub config { $_[0]->{config} }
@@ -33,13 +39,17 @@ sub build_routes {
 
     my $routes = $self->{routes} = Routes::Tiny->new;
 
-    $routes->add_route('/accounts', defaults => {action => 'accounts'});
+    $routes->add_route('/', defaults => {action => 'index'});
 
-    $routes->add_route('/messages/latest',
-        defaults => {action => 'message/latest'});
+    $routes->add_route('/messages', defaults => {action => 'messages'});
 
-    $routes->add_route('/messages/:sender/latest',
-        defaults => {action => 'message/latest'});
+    $routes->add_route(':account', defaults => {action => 'account'});
+
+    $routes->add_route(':account/messages',
+        defaults => {action => 'messages/account', template => 'messages'});
+
+    $routes->add_route(':account/:interlocutor',
+        defaults => {action => 'messages/chat', template => 'messages'});
 }
 
 sub dispatch_request {

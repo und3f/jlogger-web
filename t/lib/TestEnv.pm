@@ -11,7 +11,9 @@ use lib "$Bin/../contrib/jlogger/lib";
 use JLogger::Storage::DB;
 
 sub new {
-    bless {config => {domain => 'server.com'}}, shift;
+    bless {config =>
+          {domain => 'server.com', templates_home => "$Bin/../templates"}
+    }, shift;
 }
 
 sub init {

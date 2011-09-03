@@ -10,4 +10,4 @@ MANIFEST*
 !MANIFEST.SKIP
 pm_to_blib
 inc/
-config.yaml
+jlogger-web.yaml
