@@ -1,1 +1,3 @@
-jlogger-web.yaml
+domain: 'server.com'
+database:
+    source: 'dbi:SQLite:dbname=/home/und3f/jlogger.db'
