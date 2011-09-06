@@ -17,17 +17,10 @@ sub selection {
     ];
 }
 
-sub get_messages {
-    my $self = shift;
+sub is_outgoing_message {
+    my ($self, $message) = @_;
 
-    my @messages = $self->SUPER::get_messages();
-
-    foreach my $message (@messages) {
-        $message->{outgoing} =
-          !!($message->{sender}{jid} eq $self->params->{account});
-    }
-
-    @messages;
+    !!($message->{sender}{jid} eq $self->params->{account});
 }
 
 1;
