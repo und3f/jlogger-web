@@ -3,6 +3,7 @@ package JLogger::Web::Action;
 use strict;
 use warnings;
 
+use Encode;
 use File::Spec;
 use JSON;
 use Text::Caml;
@@ -53,7 +54,7 @@ sub render_html {
         ($self->params->{template} || $self->params->{action}) . '.mt',
         {%$data, config => $self->config, params => $self->params}
     );
-    [200, ['Content-Type', 'text/html'], [$html]];
+    [200, ['Content-Type', 'text/html'], [encode 'utf8', $html]];
 }
 
 sub message {
