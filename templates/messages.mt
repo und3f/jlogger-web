@@ -1,20 +1,12 @@
 <html>
   <head>
-    <title>
-      {{params.account}}
-      {{^params.account}}All{{/params.account}}
-      messages
-    </title>
+    <title>{{>messages_title.mt}}</title>
     {{>head.mt}}
   </head>
   <body>
     {{>header.mt}}
 
-    <h1>
-      {{params.account}}
-      {{^params.account}}All{{/params.account}}
-      messages
-    </h1>
+    <h1>{{>messages_title.mt}}</h1>
 
     {{#messages}}
       {{>message.mt}}

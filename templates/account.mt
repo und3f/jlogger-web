@@ -1,15 +1,14 @@
 <html>
   <head>
-    <title>JLogger Web {{params.account}} messages</title>
+    <title>JLogger Web {{params.account}} chats</title>
     {{>head.mt}}
   </head>
   <body>
     {{>header.mt}}
 
-    <ul id="accounts">
-      <li>
-        <a href="/messages">All messages</a>
-      </li>
+    <h1>{{params.account}} chats</h1>
+    <ul class="unstyled">
+      <li><a href="/{{params.account}}/messages">All messages</a></li>
       {{#chats}}
       <li>
         <a href="/{{params.account}}/{{.}}">{{.}}</a>
