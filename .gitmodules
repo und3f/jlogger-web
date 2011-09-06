@@ -1,3 +1,6 @@
 [submodule "contrib/jlogger"]
 	path = contrib/jlogger
 	url = git://github.com/und3f/jlogger.git
+[submodule "contrib/bootstrap"]
+	path = contrib/bootstrap
+	url = https://github.com/twitter/bootstrap.git

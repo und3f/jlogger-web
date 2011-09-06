@@ -1,5 +1,5 @@
 <link rel="stylesheet"
-  href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.2.0.min.css">
+  href="/css/bootstrap-1.2.0.min.css">
 <style type="text/css" title="jlogger-web" media="screen">
   @import "/css/jlogger-web.css";
 </style>
