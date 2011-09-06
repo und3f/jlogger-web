@@ -8,3 +8,7 @@ body {
 .message .body {
     font-size: 150%;
 }
+
+.alert-message {
+    margin-bottom: 0;
+}

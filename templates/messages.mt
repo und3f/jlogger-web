@@ -8,13 +8,13 @@
     {{>head.mt}}
   </head>
   <body>
+    {{>header.mt}}
+
     <h1>
       {{params.account}}
       {{^params.account}}All{{/params.account}}
       messages
     </h1>
-
-    {{>header.mt}}
 
     {{#messages}}
       {{>message.mt}}
