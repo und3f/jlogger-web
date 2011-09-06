@@ -1,5 +1,4 @@
-<link rel="stylesheet"
-  href="/css/bootstrap-1.2.0.min.css">
+<link rel="stylesheet" href="/css/bootstrap-1.2.0.min.css">
 <style type="text/css" title="jlogger-web" media="screen">
   @import "/css/jlogger-web.css";
 </style>
