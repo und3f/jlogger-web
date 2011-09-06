@@ -9,6 +9,11 @@ body {
     font-size: 150%;
 }
 
-.alert-message {
+.message {
     margin-bottom: 0;
+    background-color: #fdf5d9;
+}
+
+.message.outgoing {
+    background-color: #d1eed1;
 }

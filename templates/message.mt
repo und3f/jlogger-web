@@ -1,10 +1,5 @@
-<div class="message alert-message block-message
-  {{#outgoing}}
-    success
-  {{/outgoing}}
-  {{^outgoing}}
-    info
-  {{/outgoing}}
+<div class="message well
+  {{#outgoing}}outgoing{{/outgoing}}
   ">
   <span class="sender-recipient">
     <a href="/{{sender.jid}}/messages">
