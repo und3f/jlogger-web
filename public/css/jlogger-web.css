@@ -1,0 +1,10 @@
+body {
+    padding-top: 40px;
+}
+
+.message .sender-recipient {
+}
+
+.message .body {
+    font-size: 150%;
+}

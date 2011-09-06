@@ -5,10 +5,11 @@
   </head>
   <body>
     {{>header.mt}}
+    <h1>JLogger accounts</h1>
 
-    <ul id="accounts">
+    <ul class="unstyled">
       <li>
-        <a href="/messages">All messages</a>
+        <a href="/messages">All captured messages</a>
       </li>
       {{#accounts}}
       <li>

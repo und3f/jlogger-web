@@ -3,7 +3,7 @@ package JLogger::Web::Action::Messages::Chat;
 use strict;
 use warnings;
 
-use base 'JLogger::Web::Action::Messages';
+use base 'JLogger::Web::Action::Messages::Account';
 
 sub selection {
     my $self = shift;
