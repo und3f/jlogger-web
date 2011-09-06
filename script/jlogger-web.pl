@@ -8,6 +8,7 @@ use File::Spec::Functions;
 use Plack::Builder;
 use YAML;
 
+use lib catfile(dirname(__FILE__), '..', 'lib');
 use JLogger::Web;
 
 my $home        = catfile(dirname(__FILE__), '..');
