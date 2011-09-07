@@ -3,6 +3,8 @@ package JLogger::Web::Action::Messages;
 use strict;
 use warnings;
 
+use utf8;
+
 use base 'JLogger::Web::Action';
 
 sub selection { [] }
@@ -25,6 +27,7 @@ sub get_messages {
     );
 
     foreach my $message (@messages) {
+        utf8::decode($message->{body});
         $message->{outgoing} = $self->is_outgoing_message($message);
     }
 

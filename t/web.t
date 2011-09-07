@@ -2,10 +2,11 @@
 
 use strict;
 use warnings;
+use utf8;
 
 use lib "t/lib";
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Plack::Test;
 use HTTP::Request::Common qw(GET);
 
@@ -33,9 +34,11 @@ my $message = {
     message_type => 'chat',
     body         => 'body text',
 };
-$test_env->storage->store($message);
 
-$test_env->storage->store(
+my $storage = $test_env->storage;
+$storage->store($message);
+
+$storage->store(
     {   %$message,
         from => 'rec@server.com',
         to   => 'sender@server.com/work',
@@ -43,10 +46,17 @@ $test_env->storage->store(
     }
 );
 
-$test_env->storage->store(
+$storage->store(
     {   %$message,
         from => 'sender@server2.com',
         body => 'body2 text',
+    }
+);
+
+$storage->store(
+    {   %$message,
+        from => 'sender@server2.com',
+        body => 'привет',
     }
 );
 
@@ -72,4 +82,9 @@ test_psgi $app, sub {
     $res = $cb->(GET '/sender@server.com/rec@server.com');
     like $res->content, qr/body text/;
     like $res->content, qr/reply/;
+
+    $res = $cb->(GET '/rec@server.com/sender@server2.com');
+    my $content = $res->content;
+    utf8::decode($content);
+    like $content, qr/привет/;
   }
