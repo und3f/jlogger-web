@@ -6,6 +6,7 @@ use utf8;
 
 use File::Spec;
 use JSON;
+use Plack::Request;
 use Text::Caml;
 require Carp;
 
@@ -19,6 +20,8 @@ sub new {
 
 sub env { $_[0]->{env} }
 
+sub req { $_[0]->{req} ||= Plack::Request->new($_[0]->{env}) }
+
 sub params { $_[0]->{params} }
 
 sub config { $_[0]->{config} }
@@ -26,7 +29,17 @@ sub config { $_[0]->{config} }
 sub render {
     my $self = shift;
 
-    my $format = $self->params->{format} || 'html';
+    my $format = $self->params->{format};
+    unless ($format) {
+        if (my $accept = $self->req->header('Accept')) {
+            ($accept) = split /,/, $accept, 2;
+            ($accept) = split /;/, $accept;
+
+            $format = 'json' if ($accept eq 'application/json');
+        }
+        $format ||= 'html';
+    }
+
     if ($format eq 'html') {
         $self->render_html(@_);
     }
@@ -65,6 +78,5 @@ sub message {
 sub identificator {
     JLogger::Web::Model::Identificator->new;
 }
-
 
 1;

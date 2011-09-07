@@ -7,7 +7,7 @@ use JSON;
 use Plack::Response;
 use FindBin '$Bin';
 
-use Test::More tests => 17;
+use Test::More tests => 21;
 use Routes::Tiny;
 
 use_ok 'JLogger::Web::Action';
@@ -25,6 +25,11 @@ is_deeply $action->env, $env, 'env';
 is_deeply $action->params, {action => 'test'}, 'params';
 
 is $action->config->{config}, 'ok', 'config';
+
+my $req = $action->req;
+is $req->remote_host, $env->{REMOTE_HOST}, 'req';
+
+is $action->req, $req, 'req stored';
 
 my $res = Plack::Response->new(@{$action->render_json({test => 'ok'})});
 
@@ -52,3 +57,13 @@ $action->params->{format} = 'json';
 $res = Plack::Response->new(@{$action->render({test => 'ok'})});
 is $res->headers->header('Content-Type'), 'application/json';
 is_deeply decode_json $res->body->[0], {test => 'ok'};
+
+# New action for Accept header tests
+$action = new_ok 'JLogger::Web::Action',
+  [ env    => {%$env, HTTP_ACCEPT => 'application/json'},
+    params => {action => 'test'},
+    config => {config => 'ok', templates_home => "$Bin/templates"}
+  ];
+
+$res = Plack::Response->new(@{$action->render({test => 'ok'})});
+is $res->headers->header('Content-Type'), 'application/json';
