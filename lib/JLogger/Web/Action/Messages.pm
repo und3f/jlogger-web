@@ -19,11 +19,16 @@ sub is_outgoing_message {
 sub get_messages {
     my $self = shift;
 
+    my $page = $self->params->{page} = $self->req->param('page') || 1;
+
+    my $per_page = $self->config->{messages_per_page};
+
     my @messages = map { $_->to_hash } $self->message->find(
         with     => [qw/sender recipient/],
         where    => $self->selection,
         order_by => 'timestamp desc',
-        limit    => $self->config->{messages_per_page},
+        limit    => $per_page,
+        offset   => ($page - 1) * $per_page,
     );
 
     foreach my $message (@messages) {

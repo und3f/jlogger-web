@@ -6,7 +6,7 @@ use utf8;
 
 use lib "t/lib";
 
-use Test::More tests => 14;
+use Test::More tests => 16;
 use Plack::Test;
 use HTTP::Request::Common qw(GET);
 
@@ -19,7 +19,8 @@ $test_env->init;
 
 use_ok 'JLogger::Web';
 
-my $jlogger_web = new_ok 'JLogger::Web', [config => $test_env->config];
+my $jlogger_web = new_ok 'JLogger::Web',
+  [config => {%{$test_env->config}, messages_per_page => 3}];
 
 $jlogger_web->init;
 
@@ -36,7 +37,7 @@ my $message = {
 };
 
 my $storage = $test_env->storage;
-$storage->store($message);
+$storage->store({%$message, id => 'all1'});
 
 $storage->store(
     {   %$message,
@@ -46,19 +47,29 @@ $storage->store(
     }
 );
 
-$storage->store(
-    {   %$message,
-        from => 'sender@server2.com',
-        body => 'body2 text',
-    }
-);
+$message->{from} = 'sender@server2.com';
+$storage->store({%$message, body => 'body2 text', id => 'all2'});
+$storage->store({%$message, body => 'привет',});
+$storage->store({%$message, body => 'one more',});
 
 $storage->store(
     {   %$message,
-        from => 'sender@server2.com',
-        body => 'привет',
+        body => 'page test',
+        id   => 'ptest',
     }
 );
+
+$test_env->dbh->do(<<'SQL');
+UPDATE messages
+SET timestamp = datetime('now', '-2 minutes')
+WHERE id = 'ptest'
+SQL
+
+$test_env->dbh->do(<<'SQL');
+UPDATE messages
+SET timestamp = datetime('now', '+2 minutes')
+WHERE id = 'all1' OR id = 'all2'
+SQL
 
 test_psgi $app, sub {
     my $cb = shift;
@@ -87,4 +98,15 @@ test_psgi $app, sub {
     my $content = $res->content;
     utf8::decode($content);
     like $content, qr/привет/;
+
+    $res = $cb->(
+        GET '/rec@server.com/sender@server2.com?page=2',
+        Accept => 'application/json'
+    );
+
+    $content = decode_json $res->content;
+    my @messages = @{$content->{messages}};
+
+    is scalar @messages, 1;
+    is $messages[0]->{id}, 'ptest';
   }
