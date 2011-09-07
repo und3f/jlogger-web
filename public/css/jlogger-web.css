@@ -12,6 +12,7 @@ body {
 .message {
     margin-bottom: 0;
     background-color: #fdf5d9;
+    padding: 5px;
 }
 
 .message.outgoing {
