@@ -20,7 +20,12 @@ sub selection {
             ]
         ]
     ];
+}
 
+sub format_load_url {
+    my $self = shift;
+
+    join('/', '', @{$self->params}{qw/account interlocutor/}, 'messages');
 }
 
 1;

@@ -5,9 +5,7 @@
     <script type="text/javascript">
     <!--
       $(document).ready(function(){
-          var loader = new MessagesLoader(
-            "/{{params.account}}{{#params.interlocutor}}/{{params.interlocutor}}{{/params.interlocutor}}/messages",
-            {{params.page}});
+          var loader = new MessagesLoader("{{load_url}}", {{params.page}});
         loader.setup();
       });
     -->

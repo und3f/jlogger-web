@@ -23,4 +23,10 @@ sub is_outgoing_message {
     !!($message->{sender}{jid} eq $self->params->{account});
 }
 
+sub format_load_url {
+    my $self = shift;
+
+    '/' . $self->params->{account} . '/messages';
+}
+
 1;
