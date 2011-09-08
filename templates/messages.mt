@@ -6,7 +6,7 @@
     <!--
       $(document).ready(function(){
           var loader = new MessagesLoader(
-            "{{params.account}}{{#params.interlocutor}}/{{params.interlocutor}}{{/params.interlocutor}}/messages",
+            "/{{params.account}}{{#params.interlocutor}}/{{params.interlocutor}}{{/params.interlocutor}}/messages",
             {{params.page}});
         loader.setup();
       });
