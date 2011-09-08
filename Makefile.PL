@@ -7,6 +7,7 @@ all_from 'lib/JLogger/Web.pm';
 requires 'Class::Load';
 requires 'JSON';
 requires 'ObjectDB';
+requires 'Plack';
 requires 'Routes::Tiny';
 requires 'String::CamelCase';
 requires 'Text::Caml';
