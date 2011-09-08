@@ -11,7 +11,7 @@ sub is_outgoing_message {
     my ($self, $message) = @_;
 
     my $domain = $self->config->{domain};
-    !!($message->{sender}{jid} =~ /$domain$/i);
+    !!($message->{sender}{jid} =~ /\@$domain$/i);
 }
 
 sub get_messages {
