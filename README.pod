@@ -1,0 +1,51 @@
+=head1 NAME
+
+JLogger::Web - web interface for L<JLogger>
+
+=head1 INSTALLATION
+
+=over
+
+=item *
+
+Install L<cpanminus|https://metacpan.org/module/App::cpanminus#INSTALLATION>
+
+=item *
+
+Install ObjectDB2 (not yet on CPAN)
+    
+    cpanm -S https://github.com/vti/object-db2/tarball/master
+
+=item *
+
+Install JLogger::Web dependecies
+
+    cpanm -S --installdeps .
+
+=item *
+
+Create config file and edit it
+
+    cp jlogger-web.yaml{.example,}
+
+=item *
+
+Start JLogger::Web
+
+    ./script/jlogger-web.pl
+
+If you want to run as FCGI application please read L<startman> documentation.
+
+=back
+
+=head1 AUTHOR
+
+Sergey Zasenko
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2011, Sergey Zasenko.
+
+This program is free software, you can redistribute it and/or modify it under
+the same terms as Perl 5.10.
+
