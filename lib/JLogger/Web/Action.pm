@@ -2,7 +2,6 @@ package JLogger::Web::Action;
 
 use strict;
 use warnings;
-use utf8;
 
 use File::Spec;
 use JSON;

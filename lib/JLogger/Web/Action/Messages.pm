@@ -3,8 +3,6 @@ package JLogger::Web::Action::Messages;
 use strict;
 use warnings;
 
-use utf8;
-
 use base 'JLogger::Web::Action';
 
 sub selection { [] }
