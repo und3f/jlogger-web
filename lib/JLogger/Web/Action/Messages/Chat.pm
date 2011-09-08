@@ -25,7 +25,7 @@ sub selection {
 sub format_load_url {
     my $self = shift;
 
-    join('/', '', @{$self->params}{qw/account interlocutor/}, 'messages');
+    join('/', '', @{$self->params}{qw/account interlocutor/});
 }
 
 1;
