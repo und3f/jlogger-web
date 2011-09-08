@@ -1,3 +1,9 @@
 domain: 'server.com'
 database:
     source: 'dbi:SQLite:dbname=/home/und3f/jlogger.db'
+
+# mysql example
+# database:
+#     source: 'dbi:mysql:dbname=logs'
+#     username: jlogger-web
+#     password: jlogger-web
