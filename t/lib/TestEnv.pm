@@ -19,12 +19,16 @@ sub new {
 sub init {
     my $self = shift;
 
-    my $db_file = File::Temp->new;
+    if (my $test_db = $ENV{TEST_DB}) {
+        my $db = $self->config->{database} = {};
+        @$db{qw/source username password/} = split /,/, $test_db;
+    }
+    else {
+        my $db_file = $self->{db_file} = File::Temp->new;
 
-    $self->{db_file} = $db_file;
-
-    $self->config->{database} =
-      {source => 'dbi:SQLite:' . $db_file->filename};
+        $self->config->{database} =
+          {source => 'dbi:SQLite:' . $db_file->filename};
+    }
 
     # Load database schema
     my $schema_file = "$Bin/../contrib/jlogger/schema/database.sqlite.sql";
