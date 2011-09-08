@@ -31,15 +31,17 @@ sub init {
     }
 
     # Load database schema
-    my $schema_file = "$Bin/../contrib/jlogger/schema/database.sqlite.sql";
+    my $db_type = lc((split(/:/, $self->config->{database}{source}))[1]);
+
+    my $schema_file = "$Bin/../contrib/jlogger/schema/database.$db_type.sql";
 
     open my $fh, '<:encoding(UTF-8)', $schema_file
       or die qq(Can't open schema "$schema_file": $!);
     my $schema = do { local $/; <$fh> };
     close $fh;
 
-    my $dbh = $self->{dbh} =
-      DBI->connect($self->config->{database}->{source});
+    my $dbh = $self->{dbh} = DBI->connect(
+        @{$self->config->{database}}{qw/source username password/});
     $dbh->{RaiseError} = 1;
     my @sql = split /\s*;\s*/, $schema;
     $dbh->do($_) foreach @sql;
