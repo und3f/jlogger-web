@@ -18,3 +18,7 @@ body {
 .message.outgoing {
     background-color: #d1eed1;
 }
+
+#preloader {
+    display: none;
+}
