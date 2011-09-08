@@ -22,8 +22,8 @@ sub process {
     #   ON (jid.id = message.sender AND message.recipient = 1)
     #   OR (jid.id = message.recipient AND message.sender = 1);
 
-    my @connetcted_accounts;
-    @connetcted_accounts =
+    my @connected_accounts;
+    @connected_accounts =
       map { $_->related('sender')->jid } $self->message->find(
         columns  => [],
         where    => [recipient => $account_id],
@@ -31,14 +31,14 @@ sub process {
         group_by => 'sender',
       );
 
-    push @connetcted_accounts,
+    push @connected_accounts,
       map { $_->related('recipient')->jid } $self->message->find(
         columns  => 'recipient',
         where    => [sender => $account_id],
         group_by => 'recipient',
       );
 
-    $self->render({chats => [uniq @connetcted_accounts],});
+    $self->render({chats => [uniq @connected_accounts],});
 }
 
 1;
