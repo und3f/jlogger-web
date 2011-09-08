@@ -48,8 +48,7 @@ sub init {
 
     # JLogger::Storage::DB for testing purpose
     $self->{storage} =
-      JLogger::Storage::DB->new(
-        source => $self->config->{database}->{source});
+      JLogger::Storage::DB->new(%{$self->config->{database}});
 
 }
 
