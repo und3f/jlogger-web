@@ -43,12 +43,12 @@ sub build_routes {
 
     $routes->add_route('/messages', defaults => {action => 'messages'});
 
-    $routes->add_route(':account', defaults => {action => 'account'});
+    $routes->add_route('/:account', defaults => {action => 'account'});
 
-    $routes->add_route(':account/messages',
+    $routes->add_route('/:account/messages',
         defaults => {action => 'messages/account', template => 'messages'});
 
-    $routes->add_route(':account/:interlocutor',
+    $routes->add_route('/:account/:interlocutor',
         defaults => {action => 'messages/chat', template => 'messages'});
 }
 
