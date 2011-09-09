@@ -123,7 +123,7 @@ Start JLogger::Web
 
     ./script/jlogger-web.pl
 
-If you want to run as FCGI application please read L<startman> documentation.
+If you want to run as FCGI application please read L<starman> documentation.
 
 =back
 
