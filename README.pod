@@ -8,7 +8,7 @@ JLogger::Web - web interface for L<JLogger>
 
 =item *
 
-Install L<cpanminus|https://metacpan.org/module/App::cpanminus#INSTALLATION>
+Install L<cpanminus|INSTALLATION>
 
 =item *
 
