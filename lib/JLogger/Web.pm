@@ -97,6 +97,13 @@ JLogger::Web - web interface for L<JLogger>
 
 =item *
 
+Get latest JLogger
+    
+    git clone git://github.com/und3f/jlogger-web.git
+    git submodule update --init
+
+=item *
+
 Install L<cpanminus>
 
 =item *
