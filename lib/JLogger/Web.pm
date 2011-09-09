@@ -97,7 +97,7 @@ JLogger::Web - web interface for L<JLogger>
 
 =item *
 
-Install L<cpanminus|INSTALLATION>
+Install L<cpanminus>
 
 =item *
 
