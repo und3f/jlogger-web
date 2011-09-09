@@ -2,11 +2,11 @@
   {{#outgoing}}outgoing{{/outgoing}}
   ">
   <span class="sender-recipient">
-    <a href="/{{sender.jid}}/messages">
+    <a href="{{#uri}}/{{sender.jid}}/messages{{/uri}}">
       {{sender.jid}}/{{sender_resource}}
     </a>
     ↝
-    <a href="/{{recipient.jid}}/messages">
+    <a href="{{#uri}}/{{recipient.jid}}/messages{{/uri}}">
       {{recipient.jid}}/{{recipient_resource}}
     </a>
   </span>

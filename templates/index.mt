@@ -13,7 +13,7 @@
       </li>
       {{#accounts}}
       <li>
-        <a href="/{{.}}">{{.}}</a>
+        <a href="{{#uri}}/{{.}}{{/uri}}">{{.}}</a>
       </li>
       {{/accounts}}
     </ul>

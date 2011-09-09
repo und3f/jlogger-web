@@ -7,6 +7,7 @@ use File::Spec;
 use JSON;
 use Plack::Request;
 use Text::Caml;
+use URI::Escape ();
 require Carp;
 
 use JLogger::Web::Model::Message;
@@ -56,6 +57,12 @@ sub render_json {
     [200, ['Content-Type', 'application/json'], [encode_json $data]];
 }
 
+sub uri_escape {
+    my ($self, $url) = @_;
+
+    return URI::Escape::uri_escape($url, '^A-Za-z0-9\-\._~/');
+}
+
 sub render_html {
     my ($self, $data) = @_;
 
@@ -64,7 +71,14 @@ sub render_html {
 
     my $html = $view->render_file(
         ($self->params->{template} || $self->params->{action}) . '.mt',
-        {%$data, config => $self->config, params => $self->params}
+        {   %$data,
+            config => $self->config,
+            params => $self->params,
+            uri    => sub {
+                my ($renderer, $text) = @_;
+                $self->uri_escape($text);
+            },
+        }
     );
     utf8::encode($html);
     [200, ['Content-Type', 'text/html'], [$html]];

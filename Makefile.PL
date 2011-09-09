@@ -13,10 +13,11 @@ requires 'ObjectDB';
 requires 'Plack';
 requires 'Routes::Tiny';
 requires 'String::CamelCase';
-requires 'Text::Caml';
+requires 'Text::Caml' => '0.009004';
 requires 'YAML';
 
 test_requires 'DBD::SQLite';
+
 #test_requires 'JLogger';
 test_requires 'Test::More' => '0.88';
 

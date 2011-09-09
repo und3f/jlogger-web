@@ -11,7 +11,7 @@
       <li><a href="/{{params.account}}/messages">All messages</a></li>
       {{#chats}}
       <li>
-        <a href="/{{params.account}}/{{.}}">{{.}}</a>
+      <a href="{{#uri}}/{{params.account}}/{{.}}{{/uri}}">{{.}}</a>
       </li>
       {{/chats}}
     </ul>
