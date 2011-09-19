@@ -11,7 +11,7 @@ function MessagesLoader(url, page) {
     this.enabled = true;
     this.page    = page;
 
-    this.loadMessages = function() {
+    this.loadMessages = function(cb) {
         this.enabled = false;
         this.page++;
         var that = this;
@@ -19,6 +19,8 @@ function MessagesLoader(url, page) {
             if (data) {
                 that.enabled = true;
                 $(data).appendTo($("#messages"));
+
+                if (cb !== undefined) cb();
             }
         });
     }
@@ -34,5 +36,13 @@ function MessagesLoader(url, page) {
     this.setup = function() {
       var that = this;
       $(window).scroll(function(){that.onScroll()});
+
+      this.fillWindowWithMessages();
+    }
+
+    this.fillWindowWithMessages = function() {
+      if ($(window).height() === $(document).height())
+          var that = this;
+          this.loadMessages(function(){that.fillWindowWithMessages()});
     }
 }
