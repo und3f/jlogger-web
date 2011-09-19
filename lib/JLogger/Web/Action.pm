@@ -84,6 +84,12 @@ sub render_html {
     [200, ['Content-Type', 'text/html'], [$html]];
 }
 
+sub render_not_found {
+    my $self = shift;
+
+    [404, ['Content-Type', 'text/plain'], ['Not found']];
+}
+
 sub message {
     JLogger::Web::Model::Message->new;
 }

@@ -10,10 +10,14 @@ use List::MoreUtils 'uniq';
 sub process {
     my $self = shift;
 
-    my $account_id = $self->identificator->find(
+    my $account = $self->identificator->find(
         columns => 'id',
         where   => [jid => $self->params->{account}]
-    )->next->id;
+    )->next;
+
+    return $self->render_not_found unless $account;
+    
+    my $account_id = $account->id;
 
     # TODO: rewrite this to one query:
     # SELECT jid.jid
