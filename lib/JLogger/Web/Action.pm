@@ -7,14 +7,17 @@ use File::Spec;
 use JSON;
 use Plack::Request;
 use Text::Caml;
-use URI::Escape ();
 require Carp;
 
 use JLogger::Web::Model::Message;
 use JLogger::Web::Model::Identificator;
 
+use JLogger::Web::Renderer::JSON;
+use JLogger::Web::Renderer::Mustache;
+
 sub new {
     my $class = shift;
+
     bless {@_}, $class;
 }
 
@@ -26,8 +29,10 @@ sub params { $_[0]->{params} }
 
 sub config { $_[0]->{config} }
 
+sub renderer { $_[0]->{renderer} }
+
 sub render {
-    my $self = shift;
+    my ($self, $data) = @_;
 
     my $format = $self->params->{format};
     unless ($format) {
@@ -39,49 +44,21 @@ sub render {
         }
         $format ||= 'html';
     }
+    my $template =
+      ($self->params->{template} || $self->params->{action}) . '.mt';
 
-    if ($format eq 'html') {
-        $self->render_html(@_);
-    }
-    elsif ($format eq 'json') {
-        $self->render_json(@_);
-    }
-    else {
-        Carp::croak(qq{Unknown format "$format"});
-    }
-}
+    my ($ct, $body) = @{
+        $self->renderer->render(
+            $data,
+            {   format   => $format,
+                params   => $self->params,
+                template => $template,
+                uri      => \&_helper_uri_escape,
+            }
+        )
+      };
 
-sub render_json {
-    my ($self, $data) = @_;
-
-    [200, ['Content-Type', 'application/json'], [encode_json $data]];
-}
-
-sub uri_escape {
-    my ($self, $url) = @_;
-
-    return URI::Escape::uri_escape($url, '^A-Za-z0-9\-\._~/');
-}
-
-sub render_html {
-    my ($self, $data) = @_;
-
-    my $view = Text::Caml->new;
-    $view->set_templates_path($self->config->{templates_home});
-
-    my $html = $view->render_file(
-        ($self->params->{template} || $self->params->{action}) . '.mt',
-        {   %$data,
-            config => $self->config,
-            params => $self->params,
-            uri    => sub {
-                my ($renderer, $text) = @_;
-                $self->uri_escape($text);
-            },
-        }
-    );
-    utf8::encode($html);
-    [200, ['Content-Type', 'text/html'], [$html]];
+    [200, ['Content-Type', $ct], [$body]];
 }
 
 sub render_not_found {
@@ -97,5 +74,10 @@ sub message {
 sub identificator {
     JLogger::Web::Model::Identificator->new;
 }
+
+sub _helper_uri_escape {
+    my ($renderer, $url) = @_;
+    return URI::Escape::uri_escape($url, '^A-Za-z0-9\-\._~/');
+};
 
 1;

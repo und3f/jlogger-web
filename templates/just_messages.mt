@@ -1,3 +1,0 @@
-{{#messages}}
-  {{>message.mt}}
-{{/messages}}

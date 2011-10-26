@@ -44,12 +44,10 @@ sub get_messages {
 sub process {
     my $self = shift;
 
-    $self->params->{template} = 'just_messages'
-      if $self->req->param('no_layout');
-
     $self->render(
         {   messages => [$self->get_messages],
-            load_url => $self->format_load_url
+            load_url => $self->format_load_url,
+            no_layout => $self->req->param('no_layout') || 0,
         }
     );
 }

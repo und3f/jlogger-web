@@ -8,6 +8,7 @@ use Routes::Tiny      ();
 use String::CamelCase ();
 
 use JLogger::Web::Model;
+use JLogger::Web::Renderer;
 
 my $default_config = {messages_per_page => 10};
 
@@ -30,6 +31,8 @@ sub init {
     die 'Database connection information missed'
       if !$db_config || !$db_config->{source};
     JLogger::Web::Model->conn($db_config);
+
+    $self->{_renderer} = JLogger::Web::Renderer->new(home => $self->config->{templates_home});
 
     $self->build_routes;
 }
@@ -67,9 +70,10 @@ sub dispatch_request {
         Class::Load::load_class($action_class);
 
         my $action = $action_class->new(
-            env    => $env,
-            params => $route->{params},
-            config => $self->config
+            env      => $env,
+            params   => $route->{params},
+            config   => $self->config,
+            renderer => $self->{_renderer},
         );
 
         return $action->process;

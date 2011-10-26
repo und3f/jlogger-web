@@ -1,0 +1,63 @@
+package JLogger::Web::Renderer::Mustache;
+
+use strict;
+use warnings;
+
+use base 'JLogger::Web::Renderer';
+
+use Text::Caml;
+
+sub new {
+    my $class = shift;
+
+    my $self = $class->SUPER::new(@_);
+
+    my $renderer = $self->{_renderer} = Text::Caml->new;
+    $renderer->set_templates_path($self->{home});
+
+    $self;
+}
+
+sub render {
+    my ($self, $data, $params) = @_;
+
+    my ($title, $layout) = ('', 'layout.mt');
+    $layout = $params->{layout} if exists $params->{layout};
+
+    my $html = $self->_simple_file_render(
+        {   %$data,
+            %$params,
+            title  => sub { $title  = $_[1]; '' },
+            layout => sub { $layout = $_[1]; '' },
+        }
+    );
+
+    while ($layout) {
+        $html = $self->_simple_file_render(
+            {   %$data,
+                %$params,
+                template   => $layout,
+                title_text => $title,
+                body       => $html,
+                title  => sub { $title  = $_[1]; '' },
+                layout     => sub { $layout = $_[1]; '' },
+            }
+        );
+    }
+
+    utf8::encode($html);
+    ['text/html', $html];
+}
+
+sub _simple_file_render {
+    my ($self, $data) = @_;
+
+    my $html = $self->{_renderer}->render_file(
+        delete $data->{template},
+        $data
+    );
+
+    $html;
+}
+
+1;
