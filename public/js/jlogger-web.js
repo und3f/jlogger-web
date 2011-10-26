@@ -1,11 +1,3 @@
-$(document).ready(function() {
-    $("#preloader").ajaxStart(function(){
-        $(this).show();
-    }).ajaxStop(function(){
-        $(this).hide();
-    });
-});
-
 function MessagesLoader(url, page) {
     
     this.enabled = true;
@@ -15,7 +7,12 @@ function MessagesLoader(url, page) {
         this.enabled = false;
         this.page++;
         var that = this;
+
+        $("#preloader").show();
+
         $.get(url, {page: this.page, no_layout: 1}, function(data) {
+            $("#preloader").hide();
+
             if (data) {
                 that.enabled = true;
                 $(data).appendTo($("#messages"));
