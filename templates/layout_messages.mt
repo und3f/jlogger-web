@@ -4,7 +4,7 @@
 <script type="text/javascript">
 <!--
   $(document).ready(function(){
-      var loader = new MessagesLoader("{{load_url}}", {{params.page}});
+      var loader = new MessagesLoader("{{#uri}}{{load_url}}{{/uri}}", {{params.page}});
     loader.setup();
   });
 -->
