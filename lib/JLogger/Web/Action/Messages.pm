@@ -27,10 +27,11 @@ sub get_messages {
 
     my $rs = $self->message->search(
         $self->selection,
-        {   join     => [qw/sender recipient/],
-            order_by => {-desc => 'timestamp'},
-            rows     => $per_page,
-            page     => $page,
+        {   join       => [qw/sender recipient/],
+            '+columns' => ['sender.jid', 'recipient.jid'],
+            order_by   => {-desc => 'timestamp'},
+            rows       => $per_page,
+            page       => $page,
         }
     );
 
@@ -58,8 +59,8 @@ sub process {
     my $self = shift;
 
     $self->render(
-        {   messages => [$self->get_messages],
-            load_url => $self->format_load_url,
+        {   messages  => [$self->get_messages],
+            load_url  => $self->format_load_url,
             no_layout => $self->req->param('no_layout') || 0,
         }
     );

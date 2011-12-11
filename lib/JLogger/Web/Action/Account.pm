@@ -29,8 +29,12 @@ sub process {
             'me.id' => {-in => $outgoing->as_query}
         ],
         {   join     => 'involved_messages',
-            order_by => {-desc => 'involved_messages.timestamp'},
+            order_by => {-desc => 'timestamp'},
             group_by => 'me.id',
+            select   => [
+                'me.jid',
+                {max => 'involved_messages.timestamp', -as => 'timestamp'}
+            ]
         }
     );
 
