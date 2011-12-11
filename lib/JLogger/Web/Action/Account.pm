@@ -16,18 +16,10 @@ sub process {
 
     return $self->render_not_found unless $account_id;
     
-    # TODO: rewrite this to one query:
-    # SELECT jid.jid
-    # FROM messages message
-    # JOIN identificators jid
-    #   ON (jid.id = message.sender AND message.recipient = 1)
-    #   OR (jid.id = message.recipient AND message.sender = 1);
-
-    my @connected_accounts;
-
     my $incoming =
       $self->message->search({sender => $account_id},
         {select => 'recipient'});
+
     my $outgoing =
       $self->message->search({recipient => $account_id},
         {select => 'sender'});
@@ -42,10 +34,7 @@ sub process {
         }
     );
 
-    while (my $r = $rs->next) {
-        push @connected_accounts, $r->jid;
-    }
-
+    my @connected_accounts = map {$_->jid} $rs->all;
     $self->render({chats => [uniq @connected_accounts],});
 }
 
