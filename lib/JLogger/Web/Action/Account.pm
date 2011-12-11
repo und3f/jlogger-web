@@ -5,8 +5,6 @@ use warnings;
 
 use base 'JLogger::Web::Action';
 
-use List::MoreUtils 'uniq';
-
 sub process {
     my $self = shift;
 
@@ -39,7 +37,7 @@ sub process {
     );
 
     my @connected_accounts = map {$_->jid} $rs->all;
-    $self->render({chats => [uniq @connected_accounts],});
+    $self->render({chats => \@connected_accounts});
 }
 
 1;

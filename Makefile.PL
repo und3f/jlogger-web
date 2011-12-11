@@ -10,7 +10,6 @@ requires 'DBIx::Class::InflateColumn::DateTime';
 requires 'DBIx::Connector';
 requires 'File::Spec';
 requires 'JSON';
-requires 'List::MoreUtils';
 requires 'Plack';
 requires 'Routes::Tiny';
 requires 'String::CamelCase';
