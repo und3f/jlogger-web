@@ -9,9 +9,6 @@ use Plack::Request;
 use Text::Caml;
 require Carp;
 
-use JLogger::Web::Model::Message;
-use JLogger::Web::Model::Identificator;
-
 use JLogger::Web::Renderer::JSON;
 use JLogger::Web::Renderer::Mustache;
 
@@ -67,13 +64,12 @@ sub render_not_found {
     [404, ['Content-Type', 'text/plain'], ['Not found']];
 }
 
-sub message {
-    JLogger::Web::Model::Message->new;
+sub schema {
+    'JLogger::Web::Schema'
 }
 
-sub identificator {
-    JLogger::Web::Model::Identificator->new;
-}
+sub identificator {JLogger::Web::Schema->resultset('Identificator')}
+sub message {JLogger::Web::Schema->resultset('Message')}
 
 sub _helper_uri_escape {
     my ($renderer, $url) = @_;

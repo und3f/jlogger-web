@@ -10,15 +10,12 @@ use List::MoreUtils 'uniq';
 sub process {
     my $self = shift;
 
-    my $account = $self->identificator->find(
-        columns => 'id',
-        where   => [jid => $self->params->{account}]
-    )->next;
+    my $account_id = $self->identificator->find(
+        {jid => $self->params->{account}}
+    )->id;
 
-    return $self->render_not_found unless $account;
+    return $self->render_not_found unless $account_id;
     
-    my $account_id = $account->id;
-
     # TODO: rewrite this to one query:
     # SELECT jid.jid
     # FROM messages message
@@ -27,20 +24,27 @@ sub process {
     #   OR (jid.id = message.recipient AND message.sender = 1);
 
     my @connected_accounts;
-    @connected_accounts =
-      map { $_->related('sender')->jid } $self->message->find(
-        columns  => [],
-        where    => [recipient => $account_id],
-        with     => 'sender',
-        group_by => 'sender',
-      );
 
-    push @connected_accounts,
-      map { $_->related('recipient')->jid } $self->message->find(
-        columns  => 'recipient',
-        where    => [sender => $account_id],
-        group_by => 'recipient',
-      );
+    my $incoming =
+      $self->message->search({sender => $account_id},
+        {select => 'recipient'});
+    my $outgoing =
+      $self->message->search({recipient => $account_id},
+        {select => 'sender'});
+
+    my $rs = $self->identificator->search(
+        [   'me.id' => {-in => $incoming->as_query},
+            'me.id' => {-in => $outgoing->as_query}
+        ],
+        {   join     => 'involved_messages',
+            order_by => {-desc => 'involved_messages.timestamp'},
+            group_by => 'me.id',
+        }
+    );
+
+    while (my $r = $rs->next) {
+        push @connected_accounts, $r->jid;
+    }
 
     $self->render({chats => [uniq @connected_accounts],});
 }

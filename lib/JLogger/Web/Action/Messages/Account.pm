@@ -10,17 +10,13 @@ sub selection {
 
     my $account = $self->params->{account};
 
-    [   -or => [
-            'sender.jid'    => $account,
-            'recipient.jid' => $account,
-        ]
-    ];
+    [{'sender.jid' => $account}, {'recipient.jid' => $account}];
 }
 
 sub is_outgoing_message {
     my ($self, $message) = @_;
 
-    !!($message->{sender}{jid} eq $self->params->{account});
+    !!($message->{sender} eq $self->params->{account});
 }
 
 sub format_load_url {

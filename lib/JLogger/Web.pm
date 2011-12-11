@@ -7,8 +7,9 @@ use Class::Load       ();
 use Routes::Tiny      ();
 use String::CamelCase ();
 
-use JLogger::Web::Model;
+use JLogger::Web::Schema;
 use JLogger::Web::Renderer;
+use DBIx::Connector;
 
 my $default_config = {messages_per_page => 10};
 
@@ -30,7 +31,8 @@ sub init {
 
     die 'Database connection information missed'
       if !$db_config || !$db_config->{source};
-    JLogger::Web::Model->conn($db_config);
+    my $db = $self->_db_connect($db_config);
+    JLogger::Web::Schema->connection(sub {$db->dbh});
 
     $self->{_renderer} = JLogger::Web::Renderer->new(home => $self->config->{templates_home});
 
@@ -53,6 +55,27 @@ sub build_routes {
 
     $routes->add_route('/:account/:interlocutor',
         defaults => {action => 'messages/chat', template => 'messages'});
+}
+
+sub _db_connect {
+    my ($self, $db_config) = @_;
+
+    my ($source, $username, $password, $attr) =
+      @{$db_config}{qw/source username password attr/};
+    $attr ||= {};
+
+    my $conn = DBIx::Connector->new(
+        $source,
+        $username,
+        $password,
+        {   RaiseError => 1,
+            ReadOnly   => 1,
+            %$attr
+        }
+    );
+    die $DBI::errorstr unless $conn;
+
+    $conn;
 }
 
 sub dispatch_request {

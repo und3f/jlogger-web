@@ -9,8 +9,8 @@ sub process {
     my $self = shift;
 
     my $accounts = [
-        map { $_->column('jid') } $self->identificator->find(
-            where => [jid => {like => '%@' . $self->config->{domain}}]
+        map { $_->jid } $self->identificator->search(
+            {jid => {-like => '%@' . $self->config->{domain}}}
         )
     ];
 
