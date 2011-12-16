@@ -86,11 +86,5 @@ __PACKAGE__->add_unique_constraint("jid", ["jid"]);
 # Created by DBIx::Class::Schema::Loader v0.07015 @ 2011-12-11 02:55:31
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FnZ12ZyMcqF42+/HhKbQxA
 
-__PACKAGE__->has_many(
-    'involved_messages',
-    'JLogger::Web::Schema::Result::Message',
-    [{'foreign.sender' => 'self.id'}, {'foreign.recipient' => 'self.id'}]
-);
-
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

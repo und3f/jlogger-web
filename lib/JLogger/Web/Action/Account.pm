@@ -8,35 +8,28 @@ use base 'JLogger::Web::Action';
 sub process {
     my $self = shift;
 
-    my $account_id = $self->identificator->find(
-        {jid => $self->params->{account}}
-    )->id;
+    my $account_id =
+      $self->identificator->find({jid => $self->params->{account}})->id;
 
     return $self->render_not_found unless $account_id;
-    
-    my $incoming =
-      $self->message->search({sender => $account_id},
-        {select => 'recipient'});
 
-    my $outgoing =
-      $self->message->search({recipient => $account_id},
-        {select => 'sender'});
-
-    my $rs = $self->identificator->search(
-        [   'me.id' => {-in => $incoming->as_query},
-            'me.id' => {-in => $outgoing->as_query}
+    my $rs = $self->message->search(
+        [   sender    => $account_id,
+            recipient => $account_id
         ],
-        {   join     => 'involved_messages',
+        {   join     => 'involved',
             order_by => {-desc => 'timestamp'},
-            group_by => 'me.id',
+            group_by => 'involved',
             select   => [
-                'me.jid',
-                {max => 'involved_messages.timestamp', -as => 'timestamp'}
-            ]
+                \"CASE WHEN sender = $account_id THEN recipient ELSE sender END AS INVOLVED",
+                {max => 'me.timestamp'},
+                'involved.jid',
+            ],
+            as => [qw/involved timestamp jid/]
         }
     );
 
-    my @connected_accounts = map {$_->jid} $rs->all;
+    my @connected_accounts = map { $_->get_column('jid') } $rs->all;
     $self->render({chats => \@connected_accounts});
 }
 
