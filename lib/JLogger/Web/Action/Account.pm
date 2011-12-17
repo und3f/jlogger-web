@@ -21,7 +21,7 @@ sub process {
         ],
         {   join     => [qw/sender recipient/],
             order_by => {-desc => 'timestamp'},
-            group_by => [qw/sender recipient involved/],
+            group_by => 'involved',
             select   => [
                 \"CASE WHEN sender = $account_id THEN recipient.jid ELSE sender.jid END AS involved",
                 {max => 'me.timestamp'},
