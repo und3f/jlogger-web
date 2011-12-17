@@ -8,28 +8,29 @@ use base 'JLogger::Web::Action';
 sub process {
     my $self = shift;
 
-    my $account_id =
-      $self->identificator->find({jid => $self->params->{account}})->id;
+    my $account =
+      $self->identificator->find({jid => $self->params->{account}});
 
-    return $self->render_not_found unless $account_id;
+    return $self->render_not_found unless $account;
+
+    my $account_id = $account->id;
 
     my $rs = $self->message->search(
         [   sender    => $account_id,
             recipient => $account_id
         ],
-        {   join     => 'involved',
+        {   join     => [qw/sender recipient/],
             order_by => {-desc => 'timestamp'},
-            group_by => 'involved',
+            group_by => [qw/sender recipient involved/],
             select   => [
-                \"CASE WHEN sender = $account_id THEN recipient ELSE sender END AS involved",
+                \"CASE WHEN sender = $account_id THEN recipient.jid ELSE sender.jid END AS involved",
                 {max => 'me.timestamp'},
-                'involved.jid',
             ],
-            as => [qw/involved timestamp jid/]
+            as => [qw/involved timestamp/]
         }
     );
 
-    my @connected_accounts = map { $_->get_column('jid') } $rs->all;
+    my @connected_accounts = map { $_->get_column('involved') } $rs->all;
     $self->render({chats => \@connected_accounts});
 }
 

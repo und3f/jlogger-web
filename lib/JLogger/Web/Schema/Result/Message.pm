@@ -125,10 +125,5 @@ __PACKAGE__->belongs_to('sender',
     'JLogger::Web::Schema::Result::Identificator', 'sender');
 __PACKAGE__->belongs_to('recipient',
     'JLogger::Web::Schema::Result::Identificator', 'recipient');
-__PACKAGE__->belongs_to(
-    'involved',
-    'JLogger::Web::Schema::Result::Identificator',
-    sub { {'involved.id' => 'involved'} }
-);
 
 1;
