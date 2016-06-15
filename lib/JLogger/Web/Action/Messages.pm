@@ -14,6 +14,14 @@ sub is_outgoing_message {
     !!($message->{sender} =~ /\@$domain$/i);
 }
 
+sub fix_encrypted_message {
+    my ($self, $message) = @_;
+
+    if ($message->{body} =~ qr(^\?OTR:.+\.$)) {
+        $message->{encrypted} = 1;
+    }
+}
+
 sub format_load_url {
     '/messages';
 }
@@ -48,6 +56,7 @@ sub get_messages {
         };
         utf8::decode($message->{body});
         $message->{outgoing} = $self->is_outgoing_message($message);
+        $self->fix_encrypted_message($message);
 
         push @messages, $message;
     }

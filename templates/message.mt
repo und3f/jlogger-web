@@ -12,5 +12,13 @@
   </span>
   <span class="timestamp">{{timestamp}}</span>
 
-  <p class="body">{{body}}</p>
+  {{#encrypted}}
+    <p class="encrypted body">encrypted message</p>
+    <!-- BODY:
+      {{body}}
+    --!>
+  {{/encrypted}}
+  {{^encrypted}}
+    <p class="body">{{body}}</p>
+  {{/encrypted}}
 </div>

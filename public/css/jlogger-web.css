@@ -9,6 +9,11 @@ body {
     font-size: 150%;
 }
 
+.encrypted {
+    font-style: italic;
+    color: #C8C8C8;
+}
+
 .message {
     margin-bottom: 0;
     background-color: #fdf5d9;

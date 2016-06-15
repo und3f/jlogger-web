@@ -6,7 +6,7 @@ use utf8;
 
 use lib "t/lib";
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Plack::Test;
 use HTTP::Request::Common qw(GET);
 
@@ -51,6 +51,9 @@ $message->{from} = 'sender@server2.com';
 $storage->store({%$message, body => 'body2 text', id => 'all2'});
 $storage->store({%$message, body => 'привет',});
 $storage->store({%$message, body => 'one more',});
+my $otr .= '?OTR:TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIG'
+  . 'FkaXBpc2NpbmcgZWxpdC4gTnVsbGEgYXVjdG9yLg==.';
+$storage->store({%$message, from => 'otr@otr.com', body => $otr,});
 
 $storage->store(
     {   %$message,
@@ -109,4 +112,13 @@ test_psgi $app, sub {
 
     is scalar @messages, 1;
     is $messages[0]->{id}, 'ptest';
+
+    $res = $cb->(
+        GET '/rec@server.com/otr@otr.com',
+        Accept => 'application/json'
+    );
+
+    $content = decode_json $res->content;
+    @messages = @{$content->{messages}};
+    ok $messages[0]->{encrypted}, 'marked as encrypted message';
   }
