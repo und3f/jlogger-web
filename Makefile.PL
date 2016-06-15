@@ -11,7 +11,7 @@ requires 'DBIx::Connector';
 requires 'File::Spec';
 requires 'JSON';
 requires 'Plack';
-requires 'Routes::Tiny';
+requires 'Routes::Tiny' => '0.15';
 requires 'String::CamelCase';
 requires 'Text::Caml' => '0.009004';
 requires 'YAML';

@@ -86,7 +86,7 @@ sub dispatch_request {
 
     if (my $route = $self->{routes}->match($path, method => $method)) {
         my $action_class =
-          String::CamelCase::camelize($route->{params}{action});
+          String::CamelCase::camelize($route->{captures}{action});
         $action_class =~ s{/}{::}g;
         $action_class = 'JLogger::Web::Action::' . $action_class;
 
@@ -94,7 +94,7 @@ sub dispatch_request {
 
         my $action = $action_class->new(
             env      => $env,
-            params   => $route->{params},
+            params   => $route->{captures},
             config   => $self->config,
             renderer => $self->{_renderer},
         );
