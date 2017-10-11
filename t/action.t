@@ -48,7 +48,7 @@ is $res->body->[0], 'test is ok';
 $action->params->{format} = 'json';
 $res = Plack::Response->new(@{$action->render({test => 'ok'})});
 is $res->headers->header('Content-Type'), 'application/json';
-is_deeply decode_json $res->body->[0], {test => 'ok'};
+is_deeply decode_json($res->body->[0]), {test => 'ok'};
 
 # New action for Accept header tests
 $action = new_ok 'JLogger::Web::Action',
