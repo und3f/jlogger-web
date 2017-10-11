@@ -51,7 +51,6 @@ sub get_messages {
             recipient          => $r->recipient->jid,
             recipient_resource => $r->recipient_resource,
             timestamp          => $r->timestamp->iso8601,
-            id                 => $r->id,
             body               => $r->body,
         };
         utf8::decode($message->{body});

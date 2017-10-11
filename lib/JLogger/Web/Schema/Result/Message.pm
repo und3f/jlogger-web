@@ -100,8 +100,6 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "recipient_resource",
   { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "id",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
   "type",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "body",

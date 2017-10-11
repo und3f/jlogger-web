@@ -58,14 +58,13 @@ $storage->store({%$message, from => 'otr@otr.com', body => $otr,});
 $storage->store(
     {   %$message,
         body => 'page test',
-        id   => 'ptest',
     }
 );
 
 $test_env->dbh->do(<<'SQL');
 UPDATE messages
 SET timestamp = datetime('now', '-2 minutes')
-WHERE id = 'ptest'
+WHERE body = 'page test'
 SQL
 
 $test_env->dbh->do(<<'SQL');
@@ -111,7 +110,7 @@ test_psgi $app, sub {
     my @messages = @{$content->{messages}};
 
     is scalar @messages, 1;
-    is $messages[0]->{id}, 'ptest';
+    is $messages[0]->{body}, 'page test';
 
     $res = $cb->(
         GET '/rec@server.com/otr@otr.com',
